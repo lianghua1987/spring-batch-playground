@@ -46,7 +46,7 @@ public class SampleJob3 {
                 .reader(reader(true))
                 .processor(student -> {
                     System.out.println("processor");
-                    return git snew Student(student.getId(), student.getFirstName() + "!", student.getLastName() + "!", student.getEmail() + "!");
+                    return new Student(student.getId(), student.getFirstName() + "!", student.getLastName() + "!", student.getEmail() + "!");
                 })
                 .writer(writer())
                 .faultTolerant()
