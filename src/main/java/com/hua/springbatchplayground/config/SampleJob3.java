@@ -41,6 +41,7 @@ public class SampleJob3 {
     private Step step(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
         return new StepBuilder("Job3 Step started ")
                 .<Student, Student>chunk(3)
+
                 .repository(jobRepository)
                 .transactionManager(transactionManager)
                 .reader(reader(false))
@@ -52,6 +53,7 @@ public class SampleJob3 {
                 .listener(job3SkipListener)
                 .retryLimit(1)
                 .retry(Throwable.class)
+                .allowStartIfComplete(true)
                 .build();
     }
 
@@ -75,7 +77,7 @@ public class SampleJob3 {
         return reader;
     }
 
-    @Bean
+    //@Bean
     public FlatFileItemWriter<Student> writer() {
         FlatFileItemWriter<Student> writer = new FlatFileItemWriter<>();
         writer.setResource(new FileSystemResource("output/students.csv"));

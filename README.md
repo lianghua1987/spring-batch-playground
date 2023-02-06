@@ -49,4 +49,5 @@ mysql> select * from BATCH_JOB_EXECUTION;
 
 ```
 ## Troubleshoot
-> With Spring Boot 3, there is no need for @EnableBatchProcessing. If you add it, the auto-configuration of Spring Batch (including the automatic launching of jobs at startup) will back off.
+- With Spring Boot 3, there is no need for @EnableBatchProcessing. If you add it, the auto-configuration of Spring Batch (including the automatic launching of jobs at startup) will back off.
+- Step already complete or not restartable, so no action to execute - ```Step.allowStartIfComplete(true)```
