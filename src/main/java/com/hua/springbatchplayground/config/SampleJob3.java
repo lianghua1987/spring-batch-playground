@@ -41,11 +41,13 @@ public class SampleJob3 {
     private Step step(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
         return new StepBuilder("Job3 Step started ")
                 .<Student, Student>chunk(3)
-
                 .repository(jobRepository)
                 .transactionManager(transactionManager)
-                .reader(reader(false))
-                .processor(student -> new Student(student.getId(), student.getFirstName() + "!", student.getLastName() + "!", student.getEmail() + "!"))
+                .reader(reader(true))
+                .processor(student -> {
+                    System.out.println("processor");
+                    return git snew Student(student.getId(), student.getFirstName() + "!", student.getLastName() + "!", student.getEmail() + "!");
+                })
                 .writer(writer())
                 .faultTolerant()
                 .skip(Throwable.class)
@@ -59,6 +61,7 @@ public class SampleJob3 {
 
 
     private FlatFileItemReader<Student> reader(boolean isValid) {
+        System.out.println("reader");
         FlatFileItemReader<Student> reader = new FlatFileItemReader<>();
         // using FileSystemResource if file stores in a directory instead of resource folder
         reader.setResource(new PathMatchingResourcePatternResolver().getResource(isValid ? "input/students.csv" : "input/students_invalid.csv"));
@@ -79,6 +82,7 @@ public class SampleJob3 {
 
     //@Bean
     public FlatFileItemWriter<Student> writer() {
+        System.out.println("writer");
         FlatFileItemWriter<Student> writer = new FlatFileItemWriter<>();
         writer.setResource(new FileSystemResource("output/students.csv"));
         writer.setHeaderCallback(writer1 -> writer1.write("Id,First Name,Last Name, Email"));
