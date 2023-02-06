@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
-public class SampleJob {
+public class SampleJob1 {
 
     @Autowired
     SampleListener1 listener1;
@@ -29,7 +29,7 @@ public class SampleJob {
     SampleStepListener stepListener;
 
     @Bean
-    public Job job(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+    public Job job1(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
         return new JobBuilder("Hua job", jobRepository)
                 .incrementer(new RunIdIncrementer()) // work with program args
                 .start(step(jobRepository, transactionManager, 1))
@@ -38,6 +38,7 @@ public class SampleJob {
                 .listener(listener2)
                 .build();
     }
+
 
     private Step step(JobRepository jobRepository, PlatformTransactionManager transactionManager, int step) {
         return new StepBuilder("Hua Step: " + step, jobRepository)

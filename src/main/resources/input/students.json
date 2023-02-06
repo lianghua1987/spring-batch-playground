@@ -1,0 +1,72 @@
+[
+  {
+    "ID": 1,
+    "First Name": "John",
+    "Last Name": "Smith",
+    "Email": "john@gmail.com",
+    "Skip Property": false
+  },
+  {
+    "ID": 2,
+    "First Name": "Sachin",
+    "Last Name": "Dave",
+    "Email": "sachin@gmail.com",
+    "Skip Property": true
+  },
+  {
+    "ID": 3,
+    "First Name": "Peter",
+    "Last Name": "Mark",
+    "Email": "peter@gmail.com",
+    "Skip Property": false
+  },
+  {
+    "ID": 4,
+    "First Name": "Martin",
+    "Last Name": "Smith",
+    "Email": "martin@gmail.com",
+    "Skip Property": true
+  },
+  {
+    "ID": 5,
+    "First Name": "Raj",
+    "Last Name": "Patel",
+    "Email": "raj@gmail.com",
+    "Skip Property": false
+  },
+  {
+    "ID": 6,
+    "First Name": "Virat",
+    "Last Name": "Yadav",
+    "Email": "virat@gmail.com",
+    "Skip Property": true
+  },
+  {
+    "ID": 7,
+    "First Name": "Prabhas",
+    "Last Name": "Shirke",
+    "Email": "prabhas@gmail.com",
+    "Skip Property": false
+  },
+  {
+    "ID": 8,
+    "First Name": "Tina",
+    "Last Name": "Kapoor",
+    "Email": "tina@gmail.com",
+    "Skip Property": true
+  },
+  {
+    "ID": 9,
+    "First Name": "Mona",
+    "Last Name": "Sharma",
+    "Email": "mona@gmail.com",
+    "Skip Property": false
+  },
+  {
+    "ID": 10,
+    "First Name": "Rahul",
+    "Last Name": "Varma",
+    "Email": "rahul@gmail.com",
+    "Skip Property": false
+  }
+]
