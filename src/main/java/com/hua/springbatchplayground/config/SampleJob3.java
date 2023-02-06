@@ -1,5 +1,6 @@
 package com.hua.springbatchplayground.config;
 
+import com.hua.springbatchplayground.listener.Job3SkipListener;
 import com.hua.springbatchplayground.model.Student;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -14,6 +15,7 @@ import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
@@ -24,6 +26,9 @@ import java.time.Instant;
 
 @Configuration
 public class SampleJob3 {
+
+    @Autowired
+    Job3SkipListener job3SkipListener;
 
     @Bean
     public Job job3(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
@@ -38,16 +43,23 @@ public class SampleJob3 {
                 .<Student, Student>chunk(3)
                 .repository(jobRepository)
                 .transactionManager(transactionManager)
-                .reader(reader())
+                .reader(reader(false))
+                .processor(student -> new Student(student.getId(), student.getFirstName() + "!", student.getLastName() + "!", student.getEmail() + "!"))
                 .writer(writer())
+                .faultTolerant()
+                .skip(Throwable.class)
+                .skipLimit(10) // .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                .listener(job3SkipListener)
+                .retryLimit(1)
+                .retry(Throwable.class)
                 .build();
     }
 
 
-    private FlatFileItemReader<Student> reader() {
+    private FlatFileItemReader<Student> reader(boolean isValid) {
         FlatFileItemReader<Student> reader = new FlatFileItemReader<>();
         // using FileSystemResource if file stores in a directory instead of resource folder
-        reader.setResource(new PathMatchingResourcePatternResolver().getResource("input/students.csv"));
+        reader.setResource(new PathMatchingResourcePatternResolver().getResource(isValid ? "input/students.csv" : "input/students_invalid.csv"));
         reader.setLineMapper(new DefaultLineMapper<>() {
             {
                 setLineTokenizer(new DelimitedLineTokenizer() {{
@@ -63,7 +75,8 @@ public class SampleJob3 {
         return reader;
     }
 
-    private FlatFileItemWriter<Student> writer() {
+    @Bean
+    public FlatFileItemWriter<Student> writer() {
         FlatFileItemWriter<Student> writer = new FlatFileItemWriter<>();
         writer.setResource(new FileSystemResource("output/students.csv"));
         writer.setHeaderCallback(writer1 -> writer1.write("Id,First Name,Last Name, Email"));

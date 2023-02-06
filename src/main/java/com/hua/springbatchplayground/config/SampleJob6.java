@@ -7,16 +7,23 @@
 //import org.springframework.batch.core.launch.support.RunIdIncrementer;
 //import org.springframework.batch.core.repository.JobRepository;
 //import org.springframework.batch.core.step.builder.StepBuilder;
+//import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
+//import org.springframework.batch.item.database.ItemPreparedStatementSetter;
+//import org.springframework.batch.item.database.JdbcBatchItemWriter;
 //import org.springframework.batch.item.database.JdbcCursorItemReader;
 //import org.springframework.boot.context.properties.ConfigurationProperties;
 //import org.springframework.boot.jdbc.DataSourceBuilder;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
 //import org.springframework.context.annotation.Primary;
+//import org.springframework.core.io.FileSystemResource;
 //import org.springframework.jdbc.core.BeanPropertyRowMapper;
+//import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 //import org.springframework.transaction.PlatformTransactionManager;
 //
 //import javax.sql.DataSource;
+//import java.sql.PreparedStatement;
+//import java.sql.SQLException;
 //
 //
 //@Configuration
@@ -49,7 +56,7 @@
 //                .repository(jobRepository)
 //                .transactionManager(transactionManager)
 //                .reader(reader())
-//                .writer(chunk -> chunk.forEach(System.out::println))
+//                .writer(writer())
 //                .build();
 //    }
 //
@@ -60,7 +67,30 @@
 //        reader.setRowMapper(new BeanPropertyRowMapper<>() {{
 //            setMappedClass(Student.class);
 //        }});
-//
 //        return reader;
+//    }
+//
+//
+//    private JdbcBatchItemWriter<Student> writer() {
+//        JdbcBatchItemWriter<Student> writer = new JdbcBatchItemWriter<>();
+//        writer.setDataSource(customDataSource());
+//        writer.setSql("insert into student(id, firstName, lastName, email) values(:id, :firstName, :lastName, :Email)");
+//        writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
+//        return writer;
+//    }
+//
+//
+//
+//    private JdbcBatchItemWriter<Student> writerWithPrepStmt() {
+//        JdbcBatchItemWriter<Student> writer = new JdbcBatchItemWriter<>();
+//        writer.setDataSource(customDataSource());
+//        writer.setSql("insert into student(id, firstName, lastName, email) values(?,?,?,?)");
+//        writer.setItemPreparedStatementSetter((student, preparedStatement) -> {
+//            preparedStatement.setLong(1, student.getId());
+//            preparedStatement.setString(2, student.getFirstName());
+//            preparedStatement.setString(3, student.getLastName());
+//            preparedStatement.setString(4, student.getEmail());
+//        });
+//        return writer;
 //    }
 //}

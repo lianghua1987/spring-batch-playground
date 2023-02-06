@@ -42,9 +42,9 @@ public class JobScheduler {
     @Scheduled(cron = "0 0/1 * 1/1 * ?")
     public void scheduleJob() {
 //        schedule(job2);
-//        schedule(job3);
+        schedule(job3);
 //        schedule(job4);
-        schedule(job5);
+//        schedule(job5);
     }
 
     private void schedule(Job job) {
